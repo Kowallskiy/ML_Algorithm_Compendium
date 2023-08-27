@@ -1,8 +1,8 @@
 # Linear Regression
 ## LMS algorithm
-$$
+```math
 \theta_j := \theta_j - \alpha \frac{\partial}{\partial\theta_j}J(\theta)
-$$
+```
 $\alpha$ is called the __learning rate__, $\theta$ is the __parameter__ (also called __weight__) parameterizing the space of linear functions mapping from x to y. This is very natural algorithm that repeatedly takes a step in the direction of steepest decrease of J.
 For a single training example, this gives the update rule:
 $$
