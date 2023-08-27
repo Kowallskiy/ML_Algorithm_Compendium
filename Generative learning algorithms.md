@@ -5,7 +5,7 @@ Algorithms that try to learn $p(y|x)$ directly (such as logistic regression), or
 ## Gaussian discriminant analysis (GDA)
 In this model, we will assume that $p(x|y)$ is distributed according to a multivariate normal distribution. Let's talk about the properties of multivariate normal distribution before moving on to the GDA model itself.
 ### The multivariate normal distribution
-The multivariate normal distribution in d-dimensions, also called the multivariate Gaussian distribution, is parameterized by a __mean vector__ $\mu \in \Reals^d$ and a __covariance matrix__ $\varSigma \isin \Reals^{d\times d}$, where $\varSigma\ge 0$ is symmetric and positive semi-definite.
+The multivariate normal distribution in d-dimensions, also called the multivariate Gaussian distribution, is parameterized by a __mean vector__ $\mu \in \reals^d$ and a __covariance matrix__ $\varSigma \in \reals^{d\times d}$, where $\varSigma\ge 0$ is symmetric and positive semi-definite.
 Here are some examples of what the density of a Gaussian distribution looks like:
 
 ![gaussian distribution](Figures/gaussian_distribution1.jpg)
