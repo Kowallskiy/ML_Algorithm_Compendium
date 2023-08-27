@@ -1,7 +1,7 @@
 # Classification and Logistic Regression
 A classification problem is just like a regression problem, except that the values y we now want to predict take on only a small number of discrete values. Let us focus on __binary classification__ problem in which y can take on only two values, 0 and 1. (Most of what we say here will also generalize to the multiple-class case.) For instance, if we are trying to build a spam classifier for email, then $x^{(i)}$ may be some feature (a word) of a piece of email, and y may be 1 if it is a piece of spam mail and 0 otherwise.
 ## Logistic Regression
-We could approach the classification problem ignoring that y is discrete-valued, but it does not make sense for $h_\theta(x)$ to take values larger than 1 or smaller than 0 when we know that $y \isin \{0, 1\}$.
+We could approach the classification problem ignoring that y is discrete-valued, but it does not make sense for $h_\theta(x)$ to take values larger than 1 or smaller than 0 when we know that $y \in \{0, 1\}$.
 To fix this, let's change the hypotheses $h_\theta(x)$:
 ```math
 g(\theta^Tx) = \frac{1}{1 + e^{-\theta^Tx}}
