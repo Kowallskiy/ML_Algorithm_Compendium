@@ -8,14 +8,14 @@ The k-means clustering algorithm is as follows:
     For every $i$, set
    
 ```math
-c^{(i)} := \argmin||x^{(i)} - \mu_j||^2
+c^{(i)} := arg min||x^{(i)} - \mu_j||^2
 ```
-
-    For each $j$, set
+For each $j$, set
 ```math
 \mu_j := \frac{\textstyle\sum_{i=1}^n 1 \{c^{(i)}=j\}x^{(i)}}{\textstyle\sum_{i=1}^n 1 \{c^{(i)}=j\}}
 ```
 }
+
 In the algorithm above, $k$ (a parameter of the algorithm) is the number of clusters we want to find; and the cluster centroids $\mu_j$ represent our current guesses for the positions of the centers of the clusters. To initialize the cluster centroids (in step 1 of the algorithm above), we could choose $k$ training examples randomly, and set the cluster centroids to be equal to the values of the $k$ examples. (Other initialization methods are also possible)
 
 The inner-loop of the algorithm repeatedly carries out two steps: (i) "Assigning" each training example $x^{(i)}$ to the closest cluster centroid $\mu_j$, and moving each cluster centroid $\mu_j$ to the mean of the points assigned to it. The figure shows an illustration of running k-means.
