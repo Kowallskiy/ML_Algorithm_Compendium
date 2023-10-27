@@ -1,6 +1,6 @@
 # Методы машинного обучения
 
-## Содердание
+## Содержание
 
 * Алгоритмы
 * Классификация
@@ -20,8 +20,9 @@ melb_data["Date"] = melb_data["Date"].dt.year
 
 Для последующей обработки данных необходимо выявить _пропущенные значения_:
 
+|Feature|№|
+|---|---|
 |car|62|
-|___|___|
 |BuildingArea|6450|
 |YearBuilt|5375|
 |CouncilArea|1369|
@@ -31,6 +32,8 @@ melb_data["Date"] = melb_data["Date"].dt.year
 melb_data.select_dtypes(['object']).nunique()
 ```
 
+|Feature|№|
+|---|---|
 |Suburb|314|
 |Address|13378|
 |Type|3|
