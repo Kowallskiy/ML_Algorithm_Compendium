@@ -10,7 +10,7 @@
 
 ## Линейная регрессия (Linear Regression)
 
-### Предварительная оработка данных (Preprocessing)
+### Предварительная обработка данных (Preprocessing)
 ```Python
 # Конвертация формата признака Date в формат даты и времени
 melb_data["Date"] = pd.to_datetime(melb_data["Date"], format="%d/%m/%Y")
