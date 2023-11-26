@@ -12,11 +12,7 @@ __Language__: English, [Русский](rus.md)
 
 ## Linear Regression
 
-<<<<<<< HEAD
 ### Preprocessing
-=======
-### Предварительная обработка данных (Preprocessing)
->>>>>>> 1cbf52f03c88d8457aed32b3a1d74b0a70947174
 ```Python
 # Converting the 'Date' feature to a date and time format
 melb_data["Date"] = pd.to_datetime(melb_data["Date"], format="%d/%m/%Y")
