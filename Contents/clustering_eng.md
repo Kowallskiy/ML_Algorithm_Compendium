@@ -1,10 +1,10 @@
 # Clustering
 ___
-# Кластеризация k-средних (k-means Clustering)
+# K-means Clustering
 ```Python
 sns.scatterplot(data=df, x="x", y="y")
 ```
-![Alt text](Figures/output1.png)
+![Alt text](../Figures/output1.png)
 
 Scaling:
 ```Python
@@ -13,7 +13,7 @@ df.drop('z', axis=1, inplace=True)
 data = np.array(scaler.fit_transform(df))
 plt.scatter(data[:, 0], data[:, 1])
 ```
-![Alt text](Figures/output2.png)
+![Alt text](../Figures/output2.png)
 
 ```Python
 model = KMeans(n_clusters=5, n_init=20, max_iter=300, random_state=0)
@@ -34,4 +34,4 @@ Z = Z.reshape(xx.shape)
 
 plt.scatter(data[:, 0], data[:, 1], c=df.Cluster.values, cmap='viridis', label='Data Points')
 ```
-![Alt text](Figures/output3.png)
+![Alt text](../Figures/output3.png)

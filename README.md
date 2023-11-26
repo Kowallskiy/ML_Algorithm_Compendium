@@ -1,24 +1,26 @@
-# Методы машинного обучения
+# Machine Learning
+___
+__Language__: English, [Русский](rus.md)
 
-## Содержание
+## Contents
 
-* [Алгоритмы](algorithms.md)
-* [Классификация](Classification.md)
-* [Кластеризация](claster.md)
-* [Теория (eng)](theory.md)
-* [Масштабирование](Scaler.md)
+* [Algorithms](Contents/algorithms_eng.md)
+* [Classification](Contents/Classification_eng.md)
+* [Clustering](Contents/clustering_eng.md)
+* [Theory](Contents/theory.md)
+* [Scaling](Contents/scaler_eng.md)
 
-## Линейная регрессия (Linear Regression)
+## Linear Regression
 
-### Предварительная оработка данных (Preprocessing)
+### Preprocessing
 ```Python
-# Конвертация формата признака Date в формат даты и времени
+# Converting the 'Date' feature to a date and time format
 melb_data["Date"] = pd.to_datetime(melb_data["Date"], format="%d/%m/%Y")
-# Признак Date отображает только год
+# The 'Date' feature is displaying only the year
 melb_data["Date"] = melb_data["Date"].dt.year
 ```
 
-Для последующей обработки данных необходимо выявить _пропущенные значения_:
+To further process the data, it is necessary to identify _missing values_:
 
 |Feature|№|
 |---|---|
@@ -27,7 +29,7 @@ melb_data["Date"] = melb_data["Date"].dt.year
 |YearBuilt|5375|
 |CouncilArea|1369|
 
-Затем узнаём количество уникальных значений категориальных признаков:
+Next, we determine the number of unique values for categorical features:
 ```Python
 melb_data.select_dtypes(['object']).nunique()
 ```
@@ -42,17 +44,17 @@ melb_data.select_dtypes(['object']).nunique()
 |CouncilArea|33|
 |regionname|8|
 
-Далее рассмотрим разных подхода к обучению модели:
+Next, let's consider three different approaches to model training:
 
-### Удаление строк с отсутсвующими значениями
+### Approach 1: Deleting rows with missing values
 
 ```Python
-# Удаляем строки с отсутсвующими значениями
+# Drop rows with missing values
 melb_data.dropna(axis=0, inplace=True)
 
-# Устраняем следующие признаки из матрицы признаков
+# Eliminate certain features from the feature matrix
 X = melb_data.drop(["Price", "Suburb", "Address", "SellerG", "CouncilArea"], axis=1)
-# Вектор целевой переменной
+# Target variable vector
 y = melb_data["Price"]
 
 print(X.shape)
@@ -61,16 +63,16 @@ print(X.shape)
 > (6196, 16)
 
 ```Python
-# Разделяем матрицу признаков на категориальные и номинальные
+# Separate the feature matrix into categorical and numerical
 categorical_val = ["Type", "Method", "Regionname"]
 numerical_val = X.columns.difference(categorical_val)
 
-# Создаём конвеер для преобразования категориальных переменных в бинарные представления
+# Create a pipeline to transform categorical variables into binary representations
 categorical_transformer = Pipeline([
     ('onehot', OneHotEncoder(handle_unknown='ignore'))
 ])
 
-# Применяем данный конвеер на категориальные переменные
+# Apply this pipeline to categorical variables
 preprocessor = ColumnTransformer(
     transformers=[
         ('num', 'passthrough', numerical_val),
@@ -78,50 +80,49 @@ preprocessor = ColumnTransformer(
     ]
 )
 
-# Объединяем предварительную обработку и модель машинного обучения в пайплайн
+# Combine preprocessing and machine learning model into a pipeline
 pipe = Pipeline([
     ('preprocessor', preprocessor),
     ('model', LinearRegression())
 ])
 
-# Разделяем набор данных на обучающую и тестовую выборки
+# Split the dataset into training and testing sets
 train_X, test_X, train_y, test_y = train_test_split(X, y, random_state=0)
  
- # Обучаем модель предсказываем значения целевой переменной
+# Train the model and predict target variable values
 pred = pipe.fit(train_X, train_y).predict(test_X)
 ```
 ```Python
-# Используем метрику MAPE для оценки точности
+# Use MAPE metric for accuracy evaluation
 absolute_percentage_error = np.abs((test_y - pred) / test_y) * 100
 mape = np.mean(absolute_percentage_error)
 ```
 > MAPE: __27.934158203951704__
 
-### Метод машинного обучения для заполнения отсутсвующих значений
+### Approach 2: Machine Learning Method for Handling Missing Values
 
-Чтобы не уменьшать количество данных в 2 раза, используем метод машинного обучения для предсказания значений признаков __BuildingArea__ и __YearBuilt__.
+To avoid reducing the dataset by half, we'll use a machine learning method to predict the values of the __BuildingArea__ and __YearBuilt__ features.
 
 ```Python
-# Выбираем признаки для предсказания
+# Selecting features for prediction
 relevant_features = ["Rooms", "Type", "Bedroom2", "Distance", "Postcode", "Bathroom", "Car", "Landsize", "Regionname"]
-# Отбираем строки выбранных признаков, где значения BuildingArea не пропущены
+# Filtering the rows with non-null BuildingArea values for training
 X_train = melb_data.loc[~melb_data["BuildingArea"].isnull(), relevant_features]
-# Выбираем строки признака BuildingArea, где значения не пропущены
 y_train = melb_data.loc[~melb_data["BuildingArea"].isnull(), "BuildingArea"]
-# Отбираем строки выбранных признаков, где значения BuildingArea пропущены
+# Selecting rows of BuildingArea where values are null
 X_missing = melb_data.loc[melb_data["BuildingArea"].isnull(), relevant_features]
-# Создаём пайплайн с моделью и OneHotEncoder для категориальных переменных
+# Creating a pipeline with a model and OneHotEncoder for categorical variables
 pipe = Pipeline([
     ('onehot', OneHotEncoder(handle_unknown='ignore')),
     ('model', LinearRegression())
 ])
-# Обучаем модель и предсказываем пропущенные значения
+# Training the model and predicting missing values
 y_missing_pred = pipe.fit(X_train, y_train).predict(X_missing)
 
-# Заполняем пропущенные значения BuildingArea предсказанными значениями
+# Filling missing BuildingArea values with predicted values
 melb_data.loc[melb_data["BuildingArea"].isnull(), "BuildingArea"] = y_missing_pred
 ```
-Применяем тот же алгоритм для предсказания __YearBuilt__:
+Applying the same algorithm to predict __YearBuilt__:
 
 ```Python
 relevant_features = ["Rooms", "Method", "Distance", "Postcode", "Bedroom2", "Bathroom", "Car", "Landsize", "BuildingArea", "Regionname"]
@@ -141,7 +142,7 @@ y_missing_pred = pipe.fit(X_train, y_train).predict(X_missing)
 melb_data.loc[melb_data["YearBuilt"].isnull(), "YearBuilt"] = y_missing_pred
 ```
 ```Python
-# Сбрасываем строки с пропущенными значенями признака Car (их всего 62)
+# Dropping rows with missing 'Car' values (total of 62)
 melb_data = melb_data.dropna(subset=["Car"])
 
 X = melb_data.drop(["Price", "Suburb", "Address", "SellerG", "CouncilArea"], axis=1)
@@ -153,7 +154,7 @@ print(X.shape)
 > (13518, 16)
 
 ```Python
-# Далее применяем тот же подход, как в первом случае
+# Applying the same approach as in the first case
 categorical_cols = ["Type", "Method", "Regionname"]
 numerical_cols = X.columns.difference(categorical_cols)
 
@@ -172,7 +173,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=0)
 
 pred = pipe.fit(X_train, y_train).predict(X_test)
 
-# Применяем метод Ridge (метод наименьших квадратов с L2 регуляризацией)
+# Using Ridge Regression (L2 regularization method)
 pipe_ridge = Pipeline([
     ('preprocessor', preprocessor),
     ('model', Ridge(alpha=1.0))
@@ -187,35 +188,36 @@ mape = np.mean(absolute_percentage_error)
 ```
 MAPE: __27.67606068694708__
 
-## Созданием полиномиальных признаков (Polynomial Features)
+## Approach 3: Polynomial Features
 
-В данном примере я решил усложнить модель для учёта нелинейных особенностей входных данных.
+In this example, I decided to enhance the model to account for the nonlinear features in the input data.
 
-Данный метод также использовался мной при [масштабировании](Scaler.md)
+This method was also used by me in  [scaling](Scaler.md)
 
 ```Python
-# В данном примере заполним пропущенные значения нулями
+# In this example, we fill missing values with zeros in the "Car" column
 X["Car"] = X["Car"].fillna(0)
 
 categorical_cols = ["Type", "Method"]
 numerical_cols = X.columns.difference(categorical_cols)
-# Применяем OneHotEncoder на категориальные переменные для преобразования их в бинарные значения
+# Apply OneHotEncoder to categorical variables to transform them into binary values
 categorical_transformer = Pipeline([
     ('onehot', OneHotEncoder(handle_unknown='ignore'))
 ])
-# Заполняем пропущенные значения среднимим значениями признаков
+# Fill missing values with mean values for numerical features
 numerical_transformer = Pipeline([
     ('imputer', SimpleImputer(strategy='mean'))
 ])
-# Применяем пайплайны на переменные
+# Apply pipelines to the variables
 preprocessor = ColumnTransformer(
     transformers=[
         ('num', numerical_transformer, numerical_cols),
         ('cat', categorical_transformer, categorical_cols),
     ])
 
-# Применяем обозначенный preprocessor и PolynomialFeatures для обучения на нелинейных закономерностях
-# В данном случае с degree=2, чтобы не спровоцировать overfitting
+
+# Apply the specified preprocessor and PolynomialFeatures for learning nonlinear relationships
+# In this case, degree=2 is used to avoid overfitting
 pipeline = Pipeline([
     ('preprocessor', preprocessor),
     ('poly_features', PolynomialFeatures(degree=2)),
