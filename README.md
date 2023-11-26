@@ -192,7 +192,7 @@ MAPE: __27.67606068694708__
 
 In this example, I decided to enhance the model to account for the nonlinear features in the input data.
 
-This method was also used by me in  [scaling](Scaler.md)
+This method was also used by me in [scaling](Contents/scaler_eng.md)
 
 ```Python
 # In this example, we fill missing values with zeros in the "Car" column
